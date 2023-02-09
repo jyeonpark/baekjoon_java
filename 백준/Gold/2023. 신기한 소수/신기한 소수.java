@@ -15,7 +15,9 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		n = sc.nextInt();
-		recur(0, 0);
+		int arr[] = {2,3,5,7};
+		for(Integer i : arr)
+			recur(1,i);
 		
 	}
 	
@@ -28,14 +30,13 @@ public class Main {
 		for(int i=1; i<=9; i++) {
 			int new_num = num*10 + i; // 한자리 덧붙히기
 			if (isPrime(new_num)) { // 만약 해당수가 소수라면
-				recur(length+1, new_num);
+				recur(length+1, new_num); // 붙여서 재귀호출
 			}
 		}
 	}
 	
 	public static boolean isPrime(int num) {
-		if (num == 1)
-			return false;
+
 		for(int i=2; i<=Math.sqrt(num); i++) {
 			if (num%i == 0)
 				return false;
