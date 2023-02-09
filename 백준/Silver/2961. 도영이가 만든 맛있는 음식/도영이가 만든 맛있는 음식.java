@@ -4,43 +4,61 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int n;
-	static long min_ans = Long.MAX_VALUE;
-	static int[][] food;
+	static int N;
+	static int S[];
+	static int B[];
+
+	static boolean isSelected[];
+	static long min = Long.MAX_VALUE;
 
 	public static void main(String[] args) throws IOException {
-
-		// 입력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine()); // 재료 개수
-
 		StringTokenizer st;
-		food = new int[n][2];
-		for (int i = 0; i < n; i++) {
+		N = Integer.parseInt(br.readLine()); // 재료 N개
+		S = new int[N];
+		B = new int[N];
+		isSelected = new boolean[N];
+
+		for (int j = 0; j < N; j++) {
 			st = new StringTokenizer(br.readLine());
-			food[i][0] = Integer.parseInt(st.nextToken()); // 신맛
-			food[i][1] = Integer.parseInt(st.nextToken()); // 쓴맛
+			S[j] = Integer.parseInt(st.nextToken());
+			B[j] = Integer.parseInt(st.nextToken());
 		}
 
-		cook(0, 1, 0); // 신맛은 곱하므로 1로 초기화, 쓴맛은 더하므로 0으로 초기화
-		System.out.println(min_ans);
+		subSet(0);
 
+		System.out.println(min);
+	
 	}
 
-	public static void cook(int depth, int sour, int bitter) {
-		if (depth == n) {
-			if (sour > 0 && bitter > 0) { // 재료를 1개 이상 선택한 경우
-				min_ans = Math.min(min_ans, Math.abs(sour - bitter));
-				return;
+	private static void subSet(int cnt) {
+
+		if (cnt == N) {
+			int sSum = 1;
+			int bSum = 0;
+			int using = 0; // 공집합 체크용
+			for (int i = 0; i < N; i++) {
+				if (!(isSelected[i]))
+					continue;
+				using++;
+				sSum *= S[i];
+				bSum += B[i];
 			}
+
+			if (using < 1)
+				return;
+
+			int dif = Math.abs(sSum - bSum);
+			min = Math.min(min, dif);
+
 			return;
 		}
 
-		// depth번째 재료 선택
-		cook(depth + 1, sour * food[depth][0], bitter + food[depth][1]);
+		isSelected[cnt] = true;
+		subSet(cnt + 1);
 
-		// depth번째 재료 선택X
-		cook(depth + 1, sour, bitter);
+		isSelected[cnt] = false;
+		subSet(cnt + 1);
 
 	}
 }
