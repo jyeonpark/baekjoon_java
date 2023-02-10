@@ -1,47 +1,52 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 public class Main {
 
-	static class Problem {
+	static class Problem implements Comparable<Problem> {
 		int p; // 문제번호
 		int l; // 난이도
+		boolean isRecommended;
 
-		public Problem(int p, int l) {
+		public Problem(int p, int l, boolean isRecommended) {
 			this.p = p;
 			this.l = l;
+			this.isRecommended = isRecommended;
 		}
 
+		@Override
+		public int compareTo(Problem o) {
+			if (o.l == this.l)
+				return this.p - o.p; // 오름차순
+			return this.l - o.l;
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 		int N = Integer.parseInt(br.readLine());
 
-		// => 최대 난이도, 최소 난이도를 반환하기 위한 treeset
-		TreeSet<Problem> ts = new TreeSet<>((o1, o2) -> {
-			if (o1.l == o2.l) { // 문제 난이도가 같다면
-				return o1.p - o2.p; // 문제 번호가 작은 것 순서대로
-			}
-			return o1.l - o2.l; // 문제 난이도 오름차순
-		});
+		PriorityQueue<Problem> minHeap = new PriorityQueue<Problem>();
+		PriorityQueue<Problem> maxHeap = new PriorityQueue<Problem>(Collections.reverseOrder());
 
-		Map<Integer, Integer> map = new HashMap<Integer, Integer>(); // 문제번호-난이도 쌍을 관리하기 위한 map
+		Set<Integer> solvedSet = new HashSet<Integer>(); // 푼 문제번호를 저장하는 set
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			int p = Integer.parseInt(st.nextToken());
 			int l = Integer.parseInt(st.nextToken());
-			Problem problem = new Problem(p, l);
-			ts.add(problem);
-			map.put(p, l);
+			Problem problem = new Problem(p, l, true);
+			maxHeap.add(problem);
+			minHeap.add(problem);
 		}
 
 		int M = Integer.parseInt(br.readLine());
@@ -51,28 +56,27 @@ public class Main {
 			case "add":
 				int p = Integer.parseInt(st.nextToken());
 				int l = Integer.parseInt(st.nextToken());
-				Problem problem = new Problem(p, l);
-				ts.add(problem);
-				map.put(p, l);
+				Problem problem = new Problem(p, l, false);
+				maxHeap.add(problem);
+				minHeap.add(problem);
 				break;
 			case "recommend":
 				int num = Integer.parseInt(st.nextToken());
-				if (num == 1) { // 가장 어려운 문제의 번호를 출력 => 최대힙
-					System.out.println(ts.last().p);
-				} else if (num == -1) { // 가장 쉬운 문제의 번호를 출력 => 최소힙
-					System.out.println(ts.first().p);
+				PriorityQueue<Problem> pq = num == 1 ? maxHeap : minHeap;
+				while (pq.peek().isRecommended && solvedSet.contains(pq.peek().p)) {
+					pq.poll();
 				}
+				sb.append(pq.peek().p).append("\n");
 				break;
 			case "solved":
-				int s_p = Integer.parseInt(st.nextToken());
-				int s_l = map.get(s_p);
-				ts.remove(new Problem(s_p, s_l));
+				solvedSet.add(Integer.parseInt(st.nextToken())); // 푼 문제 관리하기
 				break;
 			default:
 				break;
 			}
-			
+
 		}
+		System.out.println(sb.toString());
 	}
 
 }
