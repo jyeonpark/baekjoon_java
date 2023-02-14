@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -32,7 +33,7 @@ public class Main {
 		}
 		Deque<Integer> q;
 		for (int i = 0; i < cnt; i++) {
-			q = new LinkedList<Integer>();
+			q = new ArrayDeque<Integer>();
 			// 세로1
 			for (int j = i; j < N - i; j++) {
 				q.add(arr[j][i]);
