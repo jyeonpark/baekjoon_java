@@ -4,7 +4,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -15,8 +16,7 @@ public class Main {
 	static StringBuilder sb;
 	static int n, m, v;
 	static boolean[] visited;
-	static TreeMap<Integer, PriorityQueue<Integer>> dfs_graph = new TreeMap<>();
-	static TreeMap<Integer, PriorityQueue<Integer>> bfs_graph = new TreeMap<>();
+	static ArrayList<Integer>[] list;
 
 	public static void main(String[] args) throws IOException {
 
@@ -26,22 +26,21 @@ public class Main {
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
 		v = Integer.parseInt(st.nextToken());
-
+		list = new ArrayList[n + 1];
+		for (int i = 0; i < n + 1; i++)
+			list[i] = new ArrayList<Integer>();
 		visited = new boolean[n + 1];
-		for (int i = 1; i <= n; i++) {
-			dfs_graph.put(i, new PriorityQueue<Integer>());
-			bfs_graph.put(i, new PriorityQueue<Integer>());
-		}
 
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
-			dfs_graph.get(from).add(to);
-			dfs_graph.get(to).add(from);
-			bfs_graph.get(from).add(to);
-			bfs_graph.get(to).add(from);
-			
+			list[from].add(to);
+			list[to].add(from);
+		}
+
+		for (int i = 1; i <= n; i++) {
+			Collections.sort(list[i]);
 		}
 
 		visited[v] = true;
@@ -56,12 +55,11 @@ public class Main {
 
 	static void dfs(int v) {
 		sb.append(v).append(" ");
-		while (dfs_graph.get(v).size() > 0) { // node[v] 와 인접한 노드들 탐색
-			int num = dfs_graph.get(v).poll(); // 정점 번호가 가장 작은 것 먼저 방문
-			if (visited[num])
+		for (int i : list[v]) { // node[v] 와 인접한 노드들 탐색
+			if (visited[i])
 				continue; // 이미 방문한 노드
-			visited[num] = true;
-			dfs(num);
+			visited[i] = true;
+			dfs(i);
 		}
 	}
 
@@ -73,12 +71,11 @@ public class Main {
 		while (!q.isEmpty()) {
 			int node = q.poll();
 			sb.append(node).append(" ");
-			while (bfs_graph.get(node).size() > 0) { // node[v] 와 인접한 노드들 탐색
-				int num = bfs_graph.get(node).poll(); // 정점 번호가 가장 작은 것 먼저 방문
-				if (visited[num])
+			for (int i : list[node]) { // node[v] 와 인접한 노드들 탐색
+				if (visited[i])
 					continue; // 이미 방문한 노드
-				visited[num] = true;
-				q.add(num);
+				visited[i] = true;
+				q.add(i);
 			}
 		}
 	}
