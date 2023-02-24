@@ -70,10 +70,7 @@ public class Main {
 					int ny = y + horse_dy[i];
 					if (nx >= 0 && nx < h && ny >= 0 && ny < w && map[nx][ny] != 1 && !visited[nx][ny][horse_cnt+1]) {
 						visited[nx][ny][horse_cnt+1] = true;
-
-						//System.out.printf("<말> x:%d y:%d 말움직임: %d 총 움직임:%d\n", nx, ny, horse_cnt+1, cnt + 1);
-
-						q.add(new int[] { nx, ny, horse_cnt+1, cnt + 1 });
+                        q.add(new int[] { nx, ny, horse_cnt+1, cnt + 1 });
 					}
 				}
 			}
@@ -84,9 +81,6 @@ public class Main {
 				int ny = y + dy[i];
 				if (nx >= 0 && nx < h && ny >= 0 && ny < w && map[nx][ny] != 1 && !visited[nx][ny][horse_cnt]) {
 					visited[nx][ny][horse_cnt] = true;
-					
-					//System.out.printf("<일반> x:%d y:%d 말움직임: %d 총 움직임:%d\n", nx, ny, horse_cnt, cnt + 1);
-					
 					q.add(new int[] { nx, ny, horse_cnt, cnt + 1 });
 				}
 			}
