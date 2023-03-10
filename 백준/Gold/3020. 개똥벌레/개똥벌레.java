@@ -10,7 +10,7 @@ public class Main {
 	static BufferedWriter bw;
 	static StringBuilder sb;
 	static StringTokenizer st;
-	static int N, H, size, val, min_val=Integer.MAX_VALUE, min_cnt, top[], down[];
+	static int N, H, size, val, min_val=Integer.MAX_VALUE, min_cnt, top[], down[], test;
 
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
