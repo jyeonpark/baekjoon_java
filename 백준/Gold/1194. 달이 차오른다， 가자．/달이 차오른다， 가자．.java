@@ -44,42 +44,37 @@ public class Main {
 
 	static int bfs() {
 		PriorityQueue<Move> q = new PriorityQueue<>();
-		boolean visited[][][] = new boolean[n][m][1<<'g'];
+		boolean visited[][][] = new boolean[n][m][1 << 'g']; //'a'~'f' 를 모두 담을 수 있는 크기
 		q.add(new Move(nowx, nowy, 0, 0));
 		visited[nowx][nowy][0] = true;
 
 		while (!q.isEmpty()) {
 			Move info = q.poll();
-//			System.out.printf("(%d,%d) 방문! 지금까지 %d횟수로 이동\n", info.x, info.y, info.cnt);
-			for(int i=0; i<4; i++) {
+			for (int i = 0; i < 4; i++) {
 				int nx = info.x + dx[i];
 				int ny = info.y + dy[i];
 				if (isRange(nx, ny) && !visited[nx][ny][info.keys]) {
 					char c = map[nx][ny];
 					int keys = info.keys;
-//					System.out.printf("(%d,%d)좌표 : %c\n", nx, ny, c);
 
-					if (c == '#')	continue; // 벽이라면 이동X
-					if (c>= 'a' && c<='f')	{
-						keys |= (1<<c); // 열쇠라면 집는다.
-//						System.out.println("열쇠!!");
-					}
+					if (c == '#')
+						continue; // 벽이라면 이동X
 					
-					if (c>= 'A' && c<='F' 
-							&& (keys & (1<<(Character.toLowerCase(c)))) == 0) { // 문일때 열쇠가 없다면 이동X
-//						System.out.printf("열쇠없어\n", nx,ny);
+					if (c >= 'a' && c <= 'f')
+						keys |= (1 << c); // 열쇠라면 집는다.
+
+					if (c >= 'A' && c <= 'F' && (keys & (1 << (c+32))) == 0) // 문일때 열쇠가 없다면 이동X
 						continue;
-					}
-					if (c == '1')	return info.cnt+1;
-					
-					q.add(new Move(nx, ny, info.cnt+1, keys));
+
+					if (c == '1')
+						return info.cnt + 1;
+
+					q.add(new Move(nx, ny, info.cnt + 1, keys));
 					visited[nx][ny][keys] = true;
 				}
 			}
 		}
-
-	return-1;
-
+		return -1;
 	}
 
 	static boolean isRange(int x, int y) {
@@ -92,7 +87,6 @@ public class Main {
 		int cnt;
 		int keys;
 
-		
 		public Move(int x, int y, int cnt, int keys) {
 			super();
 			this.x = x;
