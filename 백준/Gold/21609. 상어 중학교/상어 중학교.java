@@ -33,18 +33,8 @@ public class Main {
 		autoPlay();
 		System.out.println(score);
 	}
-
-	static void print() {
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				System.out.print(map[i][j] + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-	}
-
-	static void autoPlay() {
+    
+    static void autoPlay() {
 		while (true) {
 			blockGroup = new int[n][n];
 			blockGroups = new PriorityQueue<>();
@@ -53,20 +43,11 @@ public class Main {
 			findBlockGroup(); // 블록 그룹 찾기
 			if (blockGroups.isEmpty())
 				break;
-//			System.out.printf("%d %d %d \n", blockGroups.peek().standard_x, blockGroups.peek().standard_y,
-//					blockGroups.peek().blockCnt);
+
 			deleteBlock(blockGroups.poll());
-//			print();
-
 			applyGravity();
-//			print();
 			rotate();
-//			print();
-
 			applyGravity();
-//			print();
-
-//			System.out.println(score);
 		}
 	}
 
@@ -118,12 +99,7 @@ public class Main {
 				arr[i][j] = map[j][n - i - 1];
 			}
 		}
-
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				map[i][j] = arr[i][j];
-			}
-		}
+        map = arr;
 	}
 
 	static boolean bfs(int x, int y, int groupNum) {
